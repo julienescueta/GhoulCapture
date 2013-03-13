@@ -4,26 +4,28 @@ var Ghoul = require('./modules/ghoulcapture.js').create({
   "baseurl": url
 });
 
+var datautils = require('./modules/datautils.js').create();
+
 var utils = require('utils');
 
 casper.start(url);
 
-var hrefs, imageName = 0;
+var urls, imageName = 0;
 var visitMap = {};
 
-casper.then(function getAnchorHrefs() {
-  hrefs = Ghoul.getAnchorHrefs();
+casper.then(function getUrls() {
+  urls = Ghoul.getUrls();
 });
 
 casper.then(function () {
-  for (var i = 0; i < hrefs.length; i++) {
-    var href = hrefs[i];
-    console.log('href: ' + href);
-    console.log('visitMap[href]: ' + visitMap[href]);
-    if (visitMap[href] !== true) {
+  for (var i = 0; i < urls.length; i++) {
+    var url = urls[i];
+    console.log('url: ' + url);
+    console.log('visitMap[url]: ' + visitMap[url]);
+    if (visitMap[url] !== true) {
 
-      if (href.indexOf(url) === 0) {
-        casper.thenOpen(href);
+      if (url.indexOf(url) === 0) {
+        casper.thenOpen(url);
 
         casper.then(function capture() {
           casper.capture(imageName + '.png', {
@@ -36,7 +38,7 @@ casper.then(function () {
         });
       }
 
-      visitMap[href] = true;
+      visitMap[url] = true;
     }
   }
   utils.dump(visitMap);
@@ -45,3 +47,35 @@ casper.then(function () {
 casper.run(function () {
   casper.test.done();
 });
+
+function capture(url, visitMap) {
+  if (visitMap[url]) {
+    return;
+  }
+  
+  if (visitMap[url] !== true) {
+    // add entry to visitMap
+
+    // process page
+  
+  }
+  
+  casper.thenOpen(url);
+
+}
+
+function process(url) {
+  casper.then(function open() {
+    casper.open(url);
+  });
+
+  casper.then(function capture() {
+    casper.capture(imageName + '.png', {
+      top: 0,
+      left: 0,
+      height: 1024,
+      width: 1280
+    });
+  });
+}
+

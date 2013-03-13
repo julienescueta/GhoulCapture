@@ -8,7 +8,7 @@ var GhoulCapture = function GhoulCapture(options) {
   this.baseurl = options.baseurl;
 };
 
-GhoulCapture.prototype.getAnchorHrefs = function getAnchorHrefs() {
+GhoulCapture.prototype.getUrls = function getUrls() {
   var hrefs = casper.evaluate(function getAnchorHrefs() {
     var returnHref, hrefArray = [], anchors = __utils__.findAll('a');
 
